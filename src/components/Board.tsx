@@ -32,6 +32,11 @@ const Board: React.FC = () => {
   // 키보드 입력 처리
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+
+      if (isGameWon === 'won') {
+        return;
+      }
+
       if (event.key === 'ArrowUp') {
         moveUp();
       } else if (event.key === 'ArrowDown') {
@@ -48,7 +53,7 @@ const Board: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [moveUp, moveDown, moveLeft, moveRight]);
+  }, [moveUp, moveDown, moveLeft, moveRight, isGameWon]);
 
   return (
     <div className="game-container">

@@ -1,5 +1,4 @@
 // src/hooks/useGame.ts
-
 import { useEffect, useState } from 'react';
 
 import type { BoardType } from '../utils/gameLogic';
@@ -19,31 +18,45 @@ type GameWonStatus = 'notWon' | 'won' | 'continue';
 export const useGame = () => {
   const [board, setBoard] = useState<BoardType>(() => {
     const savedBoard = localStorage.getItem('board');
-    return savedBoard ? JSON.parse(savedBoard) : createInitialBoard();
+    if (savedBoard !== null) {
+      try {
+        return JSON.parse(savedBoard) as BoardType;
+      } catch (error) {
+        console.error('Failed to parse saved board:', error);
+        return createInitialBoard();
+      }
+    }
+    return createInitialBoard();
   });
+
   const [score, setScore] = useState<number>(() => {
     const savedScore = localStorage.getItem('score');
-    return savedScore ? Number(savedScore) : 0;
+    return savedScore !== null ? Number(savedScore) : 0;
   });
+
   const [bestScore, setBestScore] = useState<number>(() => {
     const savedBestScore = localStorage.getItem('bestScore');
-    return savedBestScore ? Number(savedBestScore) : 0;
+    return savedBestScore !== null ? Number(savedBestScore) : 0;
   });
+
   const [isGameWon, setIsGameWon] = useState<GameWonStatus>(() => {
     const savedGameWon = localStorage.getItem('isGameWon');
-    return savedGameWon
-      ? (JSON.parse(savedGameWon) as GameWonStatus)
-      : 'notWon';
+    if (savedGameWon !== null) {
+      try {
+        return JSON.parse(savedGameWon) as GameWonStatus;
+      } catch (error) {
+        console.error('Failed to parse saved game won status:', error);
+        return 'notWon';
+      }
+    }
+    return 'notWon';
   });
+
+
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-  // 상태 히스토리 관리
-  const [history, setHistory] = useState<{ board: BoardType; score: number }[]>(
-    [],
-  );
-  const [future, setFuture] = useState<{ board: BoardType; score: number }[]>(
-    [],
-  );
+  const [history, setHistory] = useState<{ board: BoardType; score: number }[]>([]);
+  const [future, setFuture] = useState<{ board: BoardType; score: number }[]>([]);
 
   // 초기 보드 설정
   useEffect(() => {
@@ -52,7 +65,7 @@ export const useGame = () => {
       newBoard = addRandomCell(newBoard);
       setBoard(newBoard);
     }
-  }, []);
+  }, [board]);
 
   // 게임 상태 저장
   useEffect(() => {
@@ -84,10 +97,8 @@ export const useGame = () => {
       setFuture([]); // 새로운 이동이 발생하면 미래 히스토리를 초기화
 
       // **승리 여부를 newBoard로 검사합니다.**
-      if (isGameWon === 'notWon') {
-        if (checkWin(newBoard, 128)) {
-          setIsGameWon('won');
-        }
+      if (isGameWon === 'notWon' && checkWin(newBoard, 128)) {
+        setIsGameWon('won');
       }
 
       // **게임 오버 여부는 addedBoard로 검사합니다.**
@@ -106,35 +117,58 @@ export const useGame = () => {
   };
 
   const undo = () => {
-    if (history.length > 0) {
-      const lastState = history[history.length - 1]!;
-      setFuture((prevFuture) => [{ board, score }, ...prevFuture]);
-      setBoard(lastState.board);
-      setScore(lastState.score);
-      setHistory((prevHistory) => prevHistory.slice(0, -1));
-      setIsGameOver(false);
+    if (history.length === 0) {
+      console.warn('Undo할 상태가 없습니다.');
+      return;
     }
+  
+    const lastState = history[history.length - 1];
+  
+    if (lastState === undefined) {
+      console.error('History에서 마지막 상태를 가져오는 데 실패했습니다.');
+      return;
+    }
+  
+    setFuture((prevFuture) => [{ board, score }, ...prevFuture]);
+    setBoard(lastState.board);
+    setScore(lastState.score);
+    setHistory((prevHistory) => prevHistory.slice(0, -1));
+    setIsGameOver(false);
+    setIsGameWon('notWon'); // 필요 시 승리 상태 초기화
   };
-
+  
   const redo = () => {
-    if (future.length > 0) {
-      const nextState = future[0]!;
-      setHistory((prevHistory) => [...prevHistory, { board, score }]);
-      setBoard(nextState.board);
-      setScore(nextState.score);
-      setFuture((prevFuture) => prevFuture.slice(1));
+    if (future.length === 0) {
+      console.warn('Redo할 상태가 없습니다.');
+      return;
     }
+  
+    const nextState = future[0];
+  
+    if (nextState === undefined) {
+      console.error('Future에서 다음 상태를 가져오는 데 실패했습니다.');
+      return;
+    }
+  
+    setHistory((prevHistory) => [...prevHistory, { board, score }]);
+    setBoard(nextState.board);
+    setScore(nextState.score);
+    setFuture((prevFuture) => prevFuture.slice(1));
+    // 필요 시 승리 상태 업데이트
   };
 
   const moveUpAction = () => {
     handleMove(moveUp);
   };
+
   const moveDownAction = () => {
     handleMove(moveDown);
   };
+
   const moveLeftAction = () => {
     handleMove(moveLeft);
   };
+
   const moveRightAction = () => {
     handleMove(moveRight);
   };
@@ -146,7 +180,7 @@ export const useGame = () => {
     setBoard(newBoard);
     setScore(0);
     setIsGameOver(false);
-    setIsGameWon('notWon'); //승리상태 초기화
+    setIsGameWon('notWon'); // 승리 상태 초기화
     setHistory([]);
     setFuture([]);
 

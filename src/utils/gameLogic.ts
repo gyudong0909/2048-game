@@ -1,11 +1,12 @@
 // src/utils/gameLogic.ts
 
+// 초기 보드 생성 함수
 export type BoardType = number[][];
 
-// 초기 보드 생성 함수
 export const createInitialBoard = (): BoardType => {
-  return Array.from({ length: 4 }, () => Array(4).fill(0));
+  return Array.from({ length: 4 }, () => Array(4).fill(0) as number[]);
 };
+
 
 // 랜덤한 빈 셀에 2 또는 4를 추가하는 함수
 export const addRandomCell = (board: BoardType): BoardType => {
@@ -27,10 +28,13 @@ export const addRandomCell = (board: BoardType): BoardType => {
   const randomIndex = Math.floor(Math.random() * emptyCells.length);
   const emptyCell = emptyCells[randomIndex];
 
-  if (emptyCell) {
+  if (emptyCell !== undefined) {
     const { x, y } = emptyCell;
-    newBoard[y]![x] = Math.random() < 0.9 ? 2 : 4;
+    const ErrorCheck99 = newBoard[y];
+    if (ErrorCheck99 === undefined) throw new Error('Invalid board state');
+    ErrorCheck99[x] = Math.random() < 0.9 ? 2 : 4;
   }
+  
 
   return newBoard;
 };
@@ -45,20 +49,28 @@ const slideAndMergeRow = (
   let i = 0;
 
   while (i < nonZeroTiles.length) {
-    if (
-      i + 1 < nonZeroTiles.length &&
-      nonZeroTiles[i] === nonZeroTiles[i + 1]
-    ) {
-      // 다음 타일이 존재하고, 현재 타일과 같으면 합침
-      const mergedValue = nonZeroTiles[i]! * 2;
-      newRow.push(mergedValue);
-      score += mergedValue;
-      i += 2; // 다음 타일을 건너뜀
+    const current: number | undefined = nonZeroTiles[i];
+    const next: number | undefined = nonZeroTiles[i + 1];
+  
+    if (current !== undefined) {
+      if (next !== undefined && current === next) {
+        // 다음 타일이 존재하고, 현재 타일과 같으면 합침
+        const mergedValue = current * 2;
+        newRow.push(mergedValue);
+        score += mergedValue;
+        i += 2; // 다음 타일을 건너뜀
+      } else {
+        // 합치지 않고 현재 타일을 그대로 추가
+        newRow.push(current);
+        i += 1;
+      }
     } else {
-      newRow.push(nonZeroTiles[i]!);
+      // 만약 current가 undefined라면 반복문을 그냥 넘김
       i += 1;
     }
   }
+  
+  
 
   while (newRow.length < 4) {
     newRow.push(0);
@@ -120,7 +132,10 @@ const rotateBoard = (board: BoardType): BoardType => {
   for (let x = 0; x < 4; x++) {
     const newRow: number[] = [];
     for (let y = 3; y >= 0; y--) {
-      const value = board[y]![x]!;
+      const ErrorCheck0 = board[y];
+      if (ErrorCheck0 === undefined) throw new Error;
+      const value = ErrorCheck0[x];
+      if (value === undefined) throw new Error;
       newRow.push(value);
     }
     rotatedBoard.push(newRow);
@@ -143,7 +158,9 @@ export const checkGameOver = (board: BoardType): boolean => {
   // 빈 셀이 있는 경우 게임 오버가 아님
   for (let y = 0; y < 4; y++) {
     for (let x = 0; x < 4; x++) {
-      if (board[y]![x] === 0) {
+      const row = board[y];
+      if (row === undefined) throw new Error(`Invalid row index: ${y}`);
+      if (row[x] === 0) {
         return false;
       }
     }
@@ -152,7 +169,9 @@ export const checkGameOver = (board: BoardType): boolean => {
   // 수평으로 합칠 수 있는지 확인
   for (let y = 0; y < 4; y++) {
     for (let x = 0; x < 3; x++) {
-      if (board[y]![x] === board[y]![x + 1]) {
+      const row = board[y];
+      if (row === undefined) throw new Error(`Invalid row index: ${y}`);
+      if (row[x] === row[x + 1]) {
         return false;
       }
     }
@@ -161,11 +180,17 @@ export const checkGameOver = (board: BoardType): boolean => {
   // 수직으로 합칠 수 있는지 확인
   for (let x = 0; x < 4; x++) {
     for (let y = 0; y < 3; y++) {
-      if (board[y]![x] === board[y + 1]![x]) {
+      const currentRow = board[y];
+      const nextRow = board[y + 1];
+      if (currentRow === undefined || nextRow === undefined) {
+        throw new Error(`Invalid row index: ${y} or ${y + 1}`);
+      }
+      if (currentRow[x] === nextRow[x]) {
         return false;
       }
     }
   }
+
 
   // 이동 가능한 경우가 없으면 게임 오버
   return true;
