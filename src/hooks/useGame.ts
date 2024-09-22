@@ -52,11 +52,14 @@ export const useGame = () => {
     return 'notWon';
   });
 
-
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-  const [history, setHistory] = useState<{ board: BoardType; score: number }[]>([]);
-  const [future, setFuture] = useState<{ board: BoardType; score: number }[]>([]);
+  const [history, setHistory] = useState<{ board: BoardType; score: number }[]>(
+    [],
+  );
+  const [future, setFuture] = useState<{ board: BoardType; score: number }[]>(
+    [],
+  );
 
   // 초기 보드 설정
   useEffect(() => {
@@ -121,14 +124,14 @@ export const useGame = () => {
       console.warn('Undo할 상태가 없습니다.');
       return;
     }
-  
+
     const lastState = history[history.length - 1];
-  
+
     if (lastState === undefined) {
       console.error('History에서 마지막 상태를 가져오는 데 실패했습니다.');
       return;
     }
-  
+
     setFuture((prevFuture) => [{ board, score }, ...prevFuture]);
     setBoard(lastState.board);
     setScore(lastState.score);
@@ -136,20 +139,20 @@ export const useGame = () => {
     setIsGameOver(false);
     setIsGameWon('notWon'); // 필요 시 승리 상태 초기화
   };
-  
+
   const redo = () => {
     if (future.length === 0) {
       console.warn('Redo할 상태가 없습니다.');
       return;
     }
-  
+
     const nextState = future[0];
-  
+
     if (nextState === undefined) {
       console.error('Future에서 다음 상태를 가져오는 데 실패했습니다.');
       return;
     }
-  
+
     setHistory((prevHistory) => [...prevHistory, { board, score }]);
     setBoard(nextState.board);
     setScore(nextState.score);

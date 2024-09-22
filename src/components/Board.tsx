@@ -32,7 +32,6 @@ const Board: React.FC = () => {
   // 키보드 입력 처리
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-
       if (isGameWon === 'won') {
         return;
       }

@@ -7,7 +7,6 @@ export const createInitialBoard = (): BoardType => {
   return Array.from({ length: 4 }, () => Array(4).fill(0) as number[]);
 };
 
-
 // 랜덤한 빈 셀에 2 또는 4를 추가하는 함수
 export const addRandomCell = (board: BoardType): BoardType => {
   const newBoard = board.map((row) => [...row]); // 보드 복사
@@ -34,7 +33,6 @@ export const addRandomCell = (board: BoardType): BoardType => {
     if (ErrorCheck99 === undefined) throw new Error('Invalid board state');
     ErrorCheck99[x] = Math.random() < 0.9 ? 2 : 4;
   }
-  
 
   return newBoard;
 };
@@ -51,7 +49,7 @@ const slideAndMergeRow = (
   while (i < nonZeroTiles.length) {
     const current: number | undefined = nonZeroTiles[i];
     const next: number | undefined = nonZeroTiles[i + 1];
-  
+
     if (current !== undefined) {
       if (next !== undefined && current === next) {
         // 다음 타일이 존재하고, 현재 타일과 같으면 합침
@@ -69,8 +67,6 @@ const slideAndMergeRow = (
       i += 1;
     }
   }
-  
-  
 
   while (newRow.length < 4) {
     newRow.push(0);
@@ -133,9 +129,9 @@ const rotateBoard = (board: BoardType): BoardType => {
     const newRow: number[] = [];
     for (let y = 3; y >= 0; y--) {
       const ErrorCheck0 = board[y];
-      if (ErrorCheck0 === undefined) throw new Error;
+      if (ErrorCheck0 === undefined) throw new Error();
       const value = ErrorCheck0[x];
-      if (value === undefined) throw new Error;
+      if (value === undefined) throw new Error();
       newRow.push(value);
     }
     rotatedBoard.push(newRow);
@@ -190,7 +186,6 @@ export const checkGameOver = (board: BoardType): boolean => {
       }
     }
   }
-
 
   // 이동 가능한 경우가 없으면 게임 오버
   return true;
