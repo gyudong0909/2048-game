@@ -1,14 +1,11 @@
-// src/components/Board.tsx
-
-import '../styles/Board.css';
-
 import React, { useEffect } from 'react';
 
-import { useGame } from '../hooks/useGame';
+import styles from './Board.module.css';
 import Cell from './Cell';
 import GameOver from './GameOver';
 import GameWon from './GameWon';
 import ScoreBoard from './ScoreBoard';
+import { useGame } from './useGame';
 
 const Board: React.FC = () => {
   const {
@@ -55,20 +52,28 @@ const Board: React.FC = () => {
   }, [moveUp, moveDown, moveLeft, moveRight, isGameWon]);
 
   return (
-    <div className="game-container">
+    <div className={styles.boardContainer}>
       <ScoreBoard score={score} bestScore={bestScore} />
       <div className="button-container">
-        <button className="new-game-button" onClick={resetGame}>
+        <button className={styles.newGameButton} onClick={resetGame}>
           New Game
         </button>
-        <button className="undo-button" onClick={undo} disabled={!canUndo}>
+        <button
+          className={styles.undoButton}
+          onClick={undo}
+          disabled={!canUndo}
+        >
           Undo
         </button>
-        <button className="redo-button" onClick={redo} disabled={!canRedo}>
+        <button
+          className={styles.redoButton}
+          onClick={redo}
+          disabled={!canRedo}
+        >
           Redo
         </button>
       </div>
-      <div className="board">
+      <div className={styles.board}>
         {board.map((row, rowIndex) =>
           row.map((value, colIndex) => (
             <Cell key={`${rowIndex}-${colIndex}`} value={value} />

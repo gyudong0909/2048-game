@@ -1,0 +1,43 @@
+.gameOver {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.message {
+  background: #f9f6f2;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.message p {
+  font-size: 2em;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.message button {
+  padding: 10px 20px;
+  font-size: 1em;
+  background: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.message button:hover {
+  background: #9c8575;
+}
+
+.message button:focus {
+  outline: none;
+}

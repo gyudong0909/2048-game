@@ -1,7 +1,6 @@
-// src/hooks/useGame.ts
 import { useEffect, useState } from 'react';
 
-import type { BoardType } from '../utils/gameLogic';
+import type { BoardType } from './gameLogic';
 import {
   addRandomCell,
   checkGameOver,
@@ -11,7 +10,7 @@ import {
   moveLeft,
   moveRight,
   moveUp,
-} from '../utils/gameLogic';
+} from './gameLogic';
 
 type GameWonStatus = 'notWon' | 'won' | 'continue';
 

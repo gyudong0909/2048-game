@@ -1,13 +1,11 @@
-/* src/styles/ScoreBoard.css */
-
-.score-container {
+.scoreContainer {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.score-box,
-.best-box {
+.scoreBox,
+.bestBox {
   background-color: #bbada0;
   color: #f9f6f2;
   padding: 10px;
@@ -15,11 +13,11 @@
   width: 100px;
 }
 
-.score-label {
+.scoreLabel {
   font-size: 14px;
 }
 
-.score-value {
+.scoreValue {
   font-size: 24px;
   font-weight: bold;
 }
