@@ -1,28 +1,27 @@
-/* src/styles/GameOver.css */
-
-.game-over {
+.gameWon {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(238, 228, 218, 0.5);
+  background-color: rgba(237, 194, 46, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.game-over .message {
+.message {
   text-align: center;
 }
 
-.game-over p {
+.message p {
   font-size: 60px;
-  color: #776e65;
+  color: #f9f6f2;
   margin-bottom: 20px;
 }
 
-.game-over button {
+.message button {
+  margin: 5px;
   padding: 10px 20px;
   background-color: #8f7a66;
   color: #f9f6f2;
@@ -30,4 +29,8 @@
   border-radius: 3px;
   font-size: 18px;
   cursor: pointer;
+}
+
+.message button:hover {
+  background-color: #9c8575;
 }

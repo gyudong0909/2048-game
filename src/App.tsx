@@ -1,9 +1,9 @@
-import './styles/App.css';
+import './App.css';
 
 import React from 'react';
 
-import Board from './components/Board';
-import Title from './components/Title';
+import Board from './Board';
+import Title from './Title';
 
 const App: React.FC = () => {
   return (

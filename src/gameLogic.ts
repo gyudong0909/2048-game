@@ -1,5 +1,3 @@
-// src/utils/gameLogic.ts
-
 // 초기 보드 생성 함수
 export type BoardType = number[][];
 

@@ -1,7 +1,5 @@
-// src/main.tsx
-
-import './styles/reset.css'; // CSS 리셋 스타일을 임포트합니다.
-import './styles/App.css'; // 전역 스타일을 임포트합니다.
+import './reset.css'; // CSS 리셋 스타일을 임포트합니다.
+import './App.css'; // 전역 스타일을 임포트합니다.
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

@@ -1,6 +1,4 @@
-/* src/styles/Board.css */
-
-.board-container {
+.boardContainer {
   position: relative;
   width: 500px;
   margin: 0 auto;
@@ -20,9 +18,9 @@
   box-sizing: border-box;
 }
 
-.new-game-button,
-.undo-button,
-.redo-button {
+.newGameButton,
+.undoButton,
+.redoButton {
   margin: 0 5px;
   padding: 10px 20px;
   background-color: #8f7a66;
@@ -34,14 +32,14 @@
   margin-bottom: 10px;
 }
 
-.new-game-button:hover,
-.undo-button:hover,
-.redo-button:hover {
+.newGameButton:hover,
+.undoButton:hover,
+.redoButton:hover {
   background-color: #9c8575;
 }
 
-.undo-button:disabled,
-.redo-button:disabled {
+.undoButton:disabled,
+.redoButton:disabled {
   background-color: #ccc0b3;
   cursor: not-allowed;
 }

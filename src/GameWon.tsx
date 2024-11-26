@@ -1,8 +1,6 @@
-// src/components/GameWon.tsx
-
-import '../styles/GameWon.css';
-
 import React from 'react';
+
+import styles from './GameWon.module.css';
 
 interface GameWonProps {
   onRestart: () => void;
@@ -11,8 +9,8 @@ interface GameWonProps {
 
 const GameWon: React.FC<GameWonProps> = ({ onRestart, onKeepGoing }) => {
   return (
-    <div className="game-won">
-      <div className="message">
+    <div className={styles.gameWon}>
+      <div className={styles.message}>
         <p>You win!</p>
         <button onClick={onKeepGoing}>Keep Going</button>
         <button onClick={onRestart}>New Game</button>
